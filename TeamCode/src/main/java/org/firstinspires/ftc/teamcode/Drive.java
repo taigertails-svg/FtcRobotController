@@ -58,6 +58,11 @@ public class Drive {
         BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    public void ResetIMU() {
+        Imu.resetYaw();
+        Imu.resetDeviceConfigurationForOpMode();
+    }
+
     public void DriveFieldRelative(double x, double y, double Rotation) {
         double Yaw = Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // Get the Yaw angle of the robot
 
