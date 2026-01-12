@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp
 public class Main extends OpMode {
     Drive Drive = new Drive();
+    Shooter Shooter = new Shooter();
 
     double Forward, Strafe, Rotate;
 
@@ -13,6 +14,7 @@ public class Main extends OpMode {
     @Override
     public void init() {
         Drive.Init(hardwareMap);
+        Shooter.Init(hardwareMap);
     }
 
     // Initialize gamepad controls
@@ -26,6 +28,12 @@ public class Main extends OpMode {
 
         if (gamepad1.ps) {
             Drive.ResetIMU();
+        }
+
+        if (gamepad1.a) {
+            Shooter.SetPower(1);
+        } else {
+            Shooter.SetPower(0);
         }
     }
 }
