@@ -31,10 +31,21 @@ public class Main extends OpMode {
         }
 
         if (gamepad1.a) {
-            Shooter.SetPower(1);
+            Shooter.SetShooterPower(1);
+        } else if (gamepad1.b) {
+            Shooter.SetShooterPower(-1);
         } else {
-            Shooter.SetPower(0);
+            Shooter.SetShooterPower(0);
         }
 
+        final double ServoSpinDirection = gamepad1.left_trigger - gamepad1.right_trigger;
+
+        if (ServoSpinDirection > 0) {
+            Shooter.SetServoPower(1);
+        } else if (ServoSpinDirection < 0) {
+            Shooter.SetServoPower(-1);
+        } else {
+            Shooter.SetServoPower(0);
+        }
     }
 }
