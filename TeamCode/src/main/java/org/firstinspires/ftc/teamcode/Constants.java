@@ -4,7 +4,7 @@ public class Constants {
     // Shooter constants
     
     final public String SERVO_RIGHT_DEVICE_NAME = "SR";
-    final public String SERVO_LEFT_DEVICE_NAME = "SR";
+    final public String SERVO_LEFT_DEVICE_NAME = "SL";
     final public String SHOOTER_WHEEL_DEVICE_NAME = "Shooter";
     final public double MAX_SHOOTER_POWER = 8;
 
