@@ -12,7 +12,6 @@ public class Tests extends OpMode {
     @Override
     public void init() {
         Shooter.Init(hardwareMap);
-
         Drive.Init(hardwareMap);
     }
 
