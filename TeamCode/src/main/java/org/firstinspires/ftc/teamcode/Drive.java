@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Drive {
     // Make motor and imu variables
-
     private DcMotor FrontRightMotor, FrontLeftMotor, BackRightMotor, BackLeftMotor;
     private IMU Imu;
     final private Constants Constants = new Constants();
@@ -18,10 +17,10 @@ public class Drive {
     public void Init(HardwareMap HwMap) {
         // Set variables
 
-        FrontRightMotor = HwMap.get(DcMotor.class, Constants.FRONT_RIGHT_WHEEL_DEVICE_NAME);
-        FrontLeftMotor = HwMap.get(DcMotor.class, Constants.FRONT_LEFT_WHEEL_DEVICE_NAME);
-        BackRightMotor = HwMap.get(DcMotor.class, Constants.BACK_LEFT_WHEEL_DEVICE_NAME);
-        BackLeftMotor = HwMap.get(DcMotor.class, Constants.BACK_RIGHT_WHEEL_DEVICE_NAME);
+        FrontRightMotor = HwMap.get(DcMotor.class, Constants.FRONT_RIGHT_WHEEL_NAME);
+        FrontLeftMotor = HwMap.get(DcMotor.class, Constants.FRONT_LEFT_WHEEL_NAME);
+        BackRightMotor = HwMap.get(DcMotor.class, Constants.BACK_LEFT_WHEEL_NAME);
+        BackLeftMotor = HwMap.get(DcMotor.class, Constants.BACK_RIGHT_WHEEL_NAME);
 
         FrontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         BackLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -31,7 +30,7 @@ public class Drive {
         BackRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BackLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        Imu = HwMap.get(IMU.class, Constants.IMU_DEVICE_NAME);
+        Imu = HwMap.get(IMU.class, Constants.IMU_NAME);
 
         RevHubOrientationOnRobot RobotOrientation = new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
@@ -44,7 +43,7 @@ public class Drive {
     }
 
     public void MoveMotors(double Forward, double Strafe, double Rotate) {
-        // Math stuff (don't touch)
+        // Math stuff (DON'T TOUCH)
 
         double FrontLeftPower = Forward + Strafe + Rotate;
         double BackLeftPower = Forward - Strafe + Rotate;
@@ -57,6 +56,7 @@ public class Drive {
         MaxPower = Math.max(MaxPower, Math.abs(BackLeftPower));
         MaxPower = Math.max(MaxPower, Math.abs(FrontRightPower));
         MaxPower = Math.max(MaxPower, Math.abs(BackRightPower));
+
 
         FrontLeftMotor.setPower(Constants.MAX_DRIVE_SPEED * (FrontLeftPower / MaxPower));
         FrontRightMotor.setPower(Constants.MAX_DRIVE_SPEED * (FrontRightPower / MaxPower));

@@ -14,9 +14,9 @@ public class Shooter {
 
     public void Init(HardwareMap HwMap) {
         // Set variables
-        ShooterMotor = HwMap.get(DcMotor.class, Constants.SHOOTER_WHEEL_DEVICE_NAME);
-        ServoLeft = HwMap.get(CRServo.class, Constants.SERVO_LEFT_DEVICE_NAME);
-        ServoRight = HwMap.get(CRServo.class, Constants.SERVO_RIGHT_DEVICE_NAME);
+        ShooterMotor = HwMap.get(DcMotor.class, Constants.SHOOTER_WHEEL_NAME);
+        ServoLeft = HwMap.get(CRServo.class, Constants.SERVO_LEFT_NAME);
+        ServoRight = HwMap.get(CRServo.class, Constants.SERVO_RIGHT_NAME);
 
         // Set it to break because when testing it wastes time by not coming to a complete stop
         ShooterMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -30,7 +30,7 @@ public class Shooter {
     }
 
     public void SetServoPower(double Power) {
-        if (ShooterSpeed > Constants.MINIMUM_SHOOTER_SPEED_FOR_SERVOS_TO_ACTIVATE) {
+        if (ShooterSpeed > Constants.MIN_SPEED_TO_ACTIVATE_SERVOS) {
             ServoLeft.setPower(-Power);
             ServoRight.setPower(Power);
         }
