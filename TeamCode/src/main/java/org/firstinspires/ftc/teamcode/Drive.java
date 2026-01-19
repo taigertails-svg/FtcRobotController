@@ -19,27 +19,29 @@ public class Drive {
 
         FrontRightMotor = HwMap.get(DcMotor.class, Constants.FRONT_RIGHT_WHEEL_NAME);
         FrontLeftMotor = HwMap.get(DcMotor.class, Constants.FRONT_LEFT_WHEEL_NAME);
-        BackRightMotor = HwMap.get(DcMotor.class, Constants.BACK_LEFT_WHEEL_NAME);
-        BackLeftMotor = HwMap.get(DcMotor.class, Constants.BACK_RIGHT_WHEEL_NAME);
+        BackRightMotor = HwMap.get(DcMotor.class, Constants.BACK_RIGHT_WHEEL_NAME);
+        BackLeftMotor = HwMap.get(DcMotor.class, Constants.BACK_LEFT_WHEEL_NAME);
 
-        FrontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        BackLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        FrontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FrontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FrontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BackRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BackLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         Imu = HwMap.get(IMU.class, Constants.IMU_NAME);
 
         RevHubOrientationOnRobot RobotOrientation = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
         );
 
         Imu.initialize(new IMU.Parameters(RobotOrientation));
 
         this.ResetIMU();
+
+
     }
 
     public void MoveMotors(double Forward, double Strafe, double Rotate) {

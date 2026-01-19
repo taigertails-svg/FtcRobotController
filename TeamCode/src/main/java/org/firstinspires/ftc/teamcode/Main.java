@@ -26,7 +26,7 @@ public class Main extends OpMode {
         Strafe = gamepad1.left_stick_x;
         Rotate = gamepad1.right_stick_x;
 
-        Drive.DriveFieldRelative(Forward,Strafe,Rotate);
+        Drive.MoveMotors(Forward,Strafe,Rotate);
 
         Shooter.SetShooterPower(gamepad1.a ? 1 : gamepad1.b ? -1 : 0);
         Shooter.SetServoPower(ServoSpinDirection > 0 ? 1 : ServoSpinDirection < 0 ? -1 : 0);
