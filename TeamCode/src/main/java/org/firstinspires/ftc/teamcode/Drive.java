@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -33,15 +32,13 @@ public class Drive {
         Imu = HwMap.get(IMU.class, Constants.IMU_NAME);
 
         RevHubOrientationOnRobot RobotOrientation = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
         );
 
         Imu.initialize(new IMU.Parameters(RobotOrientation));
 
         this.ResetIMU();
-
-
     }
 
     public void MoveMotors(double Forward, double Strafe, double Rotate) {
