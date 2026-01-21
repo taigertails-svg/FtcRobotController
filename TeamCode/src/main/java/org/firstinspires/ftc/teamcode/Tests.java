@@ -32,9 +32,6 @@ public class Tests extends OpMode {
         Drive.DriveFieldRelative(0,0,0);
         telemetry.addData("Drive: DriveFieldRelative","OK");
 
-        Drive.MoveMotors(0, 0, 0);
-        telemetry.addData("Drive: MoveMotors","OK");
-
         Drive.ResetIMU();
         telemetry.addData("Drive: ResetIMU", "OK");
 

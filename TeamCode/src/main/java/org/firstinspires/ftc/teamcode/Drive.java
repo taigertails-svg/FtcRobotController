@@ -1,83 +1,86 @@
+// https://github.com/FireFlies-Robotics/IntoTheDeep-FtcRobotController/blob/master/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Wheels.java
+// <3
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Drive {
-    // Make motor and imu variables
-    private DcMotor FrontRightMotor, FrontLeftMotor, BackRightMotor, BackLeftMotor;
-    private IMU Imu;
-    final private Constants Constants = new Constants();
-    public double CurrentForward, CurrentStrafe, CurrentRotate;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight;
+    private IMU Imu; // Gyros used to get the robots rotation
+    private final Constants Constants = new Constants();
 
     public void Init(HardwareMap HwMap) {
-        // Set variables
-
-        FrontRightMotor = HwMap.get(DcMotor.class, Constants.FRONT_RIGHT_WHEEL_NAME);
-        FrontLeftMotor = HwMap.get(DcMotor.class, Constants.FRONT_LEFT_WHEEL_NAME);
-        BackRightMotor = HwMap.get(DcMotor.class, Constants.BACK_RIGHT_WHEEL_NAME);
-        BackLeftMotor = HwMap.get(DcMotor.class, Constants.BACK_LEFT_WHEEL_NAME);
-
-        FrontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        BackLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-
-        FrontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FrontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        // Retrieve the IMU from the hardware map
         Imu = HwMap.get(IMU.class, Constants.IMU_NAME);
 
-        RevHubOrientationOnRobot RobotOrientation = new RevHubOrientationOnRobot(
+        // Adjust the orientation parameters to match your robot
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP
-        );
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
 
-        Imu.initialize(new IMU.Parameters(RobotOrientation));
+        Imu.initialize(parameters);
 
-        this.ResetIMU();
+        // Getting the wheel motors and setting them up
+
+        FrontLeft = HwMap.get(DcMotor.class, Constants.FRONT_LEFT_WHEEL_NAME);
+        FrontRight = HwMap.get(DcMotor.class, Constants.FRONT_RIGHT_WHEEL_NAME);
+        BackLeft = HwMap.get(DcMotor.class, Constants.BACK_LEFT_WHEEL_NAME);
+        BackRight = HwMap.get(DcMotor.class, Constants.BACK_RIGHT_WHEEL_NAME);
+
+        FrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        FrontLeft.setZeroPowerBehavior(Constants.WHEEL_ZERO_POWER_BEHAVIOUR);
+        FrontRight.setZeroPowerBehavior(Constants.WHEEL_ZERO_POWER_BEHAVIOUR);
+        BackLeft.setZeroPowerBehavior(Constants.WHEEL_ZERO_POWER_BEHAVIOUR);
+        BackRight.setZeroPowerBehavior(Constants.WHEEL_ZERO_POWER_BEHAVIOUR);
+
+        FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        FrontLeft.setMode(Constants.WHEEL_RUN_MODE);
+        FrontRight.setMode(Constants.WHEEL_RUN_MODE);
+        BackLeft.setMode(Constants.WHEEL_RUN_MODE);
+        BackRight.setMode(Constants.WHEEL_RUN_MODE);
     }
 
-    public void MoveMotors(double Forward, double Strafe, double Rotate) {
-        // Math stuff (DON'T TOUCH)
+    public void DriveFieldRelative(double x, double y, double Rotation) {
+        double MaxSpeed = Constants.MAX_DRIVE_SPEED;
+        double Yaw = Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // Get the Yaw angle of the robot
 
-        double FrontLeftPower = Forward + Strafe + Rotate;
-        double BackLeftPower = Forward - Strafe + Rotate;
-        double FrontRightPower = Forward - Strafe - Rotate;
-        double BackRightPower = Forward + Strafe - Rotate;
+        // Rotate the movement direction counter to the robot's rotation
+        double RotX = x * Math.cos(-Yaw) - y * Math.sin(-Yaw);
+        double RotY = x * Math.sin(-Yaw) + y * Math.cos(-Yaw);
 
-        double MaxPower = 1.0;
+        RotX = RotX * 1.1;  // Counteract imperfect strafing
 
-        MaxPower = Math.max(MaxPower, Math.abs(FrontLeftPower));
-        MaxPower = Math.max(MaxPower, Math.abs(BackLeftPower));
-        MaxPower = Math.max(MaxPower, Math.abs(FrontRightPower));
-        MaxPower = Math.max(MaxPower, Math.abs(BackRightPower));
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio,
+        // but only if at least one is out of the range [-1, 1]
 
+        double Denominator = Math.max(Math.abs(RotY) + Math.abs(RotX) + Math.abs(Rotation), 1);
+        double FrontLeftPower = (RotY + RotX + Rotation) / Denominator;
+        double BackLeftPower = (RotY - RotX + Rotation) / Denominator;
+        double FrontRightPower = (RotY - RotX - Rotation) / Denominator;
+        double BackRightPower = (RotY + RotX - Rotation) / Denominator;
 
-        FrontLeftMotor.setPower(Constants.MAX_DRIVE_SPEED * (FrontLeftPower / MaxPower));
-        FrontRightMotor.setPower(Constants.MAX_DRIVE_SPEED * (FrontRightPower / MaxPower));
-        BackRightMotor.setPower(Constants.MAX_DRIVE_SPEED * (BackRightPower / MaxPower));
-        BackLeftMotor.setPower(Constants.MAX_DRIVE_SPEED * (BackLeftPower / MaxPower));
+        // Move motors.
+
+        FrontLeft.setPower(FrontLeftPower * MaxSpeed);
+        BackLeft.setPower(BackLeftPower * MaxSpeed);
+        FrontRight.setPower(FrontRightPower * MaxSpeed);
+        BackRight.setPower(BackRightPower * MaxSpeed);
     }
 
-    public void DriveFieldRelative(double Forward, double Strafe, double Rotate) {
-        CurrentForward = Forward;
-        CurrentRotate = Rotate;
-        CurrentStrafe = Strafe;
-        // More math stuff (also don't touch)
-
-        double Theta = AngleUnit.normalizeRadians(Math.atan2(Forward, Strafe) - Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-        double R = Math.hypot(Strafe, Forward);
-
-        double NewForward = R * Math.sin(Theta);
-        double NewStrafe = R * Math.cos(Theta);
-
-        this.MoveMotors(NewForward, NewStrafe, Rotate);
-    }
     public void ResetIMU() {
         Imu.resetYaw();
     }
