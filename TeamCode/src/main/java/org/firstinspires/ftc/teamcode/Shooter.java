@@ -33,6 +33,9 @@ public class Shooter {
         if (ShooterSpeed > Constants.MIN_SPEED_TO_ACTIVATE_SERVOS) {
             ServoLeft.setPower(-Power);
             ServoRight.setPower(Power);
+        } else {
+            ServoLeft.setPower(0);
+            ServoRight.setPower(0);
         }
     }
 }

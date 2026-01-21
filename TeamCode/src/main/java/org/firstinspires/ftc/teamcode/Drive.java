@@ -12,6 +12,7 @@ public class Drive {
     private DcMotor FrontRightMotor, FrontLeftMotor, BackRightMotor, BackLeftMotor;
     private IMU Imu;
     final private Constants Constants = new Constants();
+    public double CurrentForward, CurrentStrafe, CurrentRotate;
 
     public void Init(HardwareMap HwMap) {
         // Set variables
@@ -64,6 +65,9 @@ public class Drive {
     }
 
     public void DriveFieldRelative(double Forward, double Strafe, double Rotate) {
+        CurrentForward = Forward;
+        CurrentRotate = Rotate;
+        CurrentStrafe = Strafe;
         // More math stuff (also don't touch)
 
         double Theta = AngleUnit.normalizeRadians(Math.atan2(Forward, Strafe) - Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
@@ -76,7 +80,5 @@ public class Drive {
     }
     public void ResetIMU() {
         Imu.resetYaw();
-        //Imu.resetDeviceConfigurationForOpMode();
-        // ^ I wonder if this is why the drive didn't work
     }
 }
