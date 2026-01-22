@@ -23,11 +23,6 @@ public class Main extends OpMode {
         final double ServoSpinDirection = gamepad1.left_trigger - gamepad1.right_trigger;
 
         Forward = gamepad1.left_stick_y;
-
-        if (Math.abs(Forward) < 0.1 || Math.abs(Forward) > 0.9) {
-            Forward = 0;
-        }
-
         Strafe = gamepad1.left_stick_x;
         Rotate = gamepad1.right_stick_x;
 

@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp
 public class Tests extends OpMode {
+    // TODO: maybe add the telemetry from tests to main
     Shooter Shooter = new Shooter();
     Drive Drive = new Drive();
 
@@ -39,6 +41,7 @@ public class Tests extends OpMode {
         telemetry.addData("Forward", Forward);
         telemetry.addData("Strafe", Strafe);
         telemetry.addData("Rotate", Rotate);
+        telemetry.addData("Yaw", Drive.Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
 
         Drive.ResetIMU();
         telemetry.addData("Drive: ResetIMU", "OK");

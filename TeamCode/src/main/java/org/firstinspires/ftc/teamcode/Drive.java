@@ -11,9 +11,15 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
+// HUGE NEWS!!!
+// i found out why it never seemed to drive right
+// the problem was that the imu yaw never actually changes and always stays the same no matter what
+// so hopefully we will be able to fix it
+// although i am pretty sure this has nothing to do with the code ;-;
+
 public class Drive {
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight;
-    private IMU Imu; // Gyros used to get the robots rotation
+    public IMU Imu; // Gyros used to get the robots rotation
     private final Constants Constants = new Constants();
 
     public void Init(HardwareMap HwMap) {
@@ -52,9 +58,10 @@ public class Drive {
 
         // Rotate the movement direction counter to the robot's rotation
         double RotX = x * Math.cos(-Yaw) - y * Math.sin(-Yaw);
-        final double RotY = x * Math.sin(-Yaw) + y * Math.cos(-Yaw);
+        double RotY = x * Math.sin(-Yaw) + y * Math.cos(-Yaw);
 
         RotX = RotX * 1.1;  // Counteract imperfect strafing
+        RotY = RotY * 1.1;
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,
