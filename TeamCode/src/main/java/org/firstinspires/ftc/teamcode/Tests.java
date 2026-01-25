@@ -43,8 +43,8 @@ public class Tests extends OpMode {
         telemetry.addData("Rotate", Rotate);
         telemetry.addData("Yaw", Drive.Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
 
-        Drive.ResetIMU();
-        telemetry.addData("Drive: ResetIMU", "OK");
+//        Drive.ResetIMU();
+//        telemetry.addData("Drive: ResetIMU", "OK");
 
         // Test joysticks
 

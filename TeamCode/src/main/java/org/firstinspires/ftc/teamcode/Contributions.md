@@ -16,7 +16,7 @@
 14. All variables should have clear names.
 15. DO NOT touch the "FtcRobotController" folder.
 16. If you see that someone made a mistake, fix it.
-17. Do not make the variables names too long. (preferably less than 4 words for normal variables and less than 6 words for constants)
+17. Do not make the variables' names too long. (preferably less than 4 words for normal variables and less than 6 words for constants)
 18. All methods should have a comment before their declaration explaining what they do.
 19. All classes should have a comment before their declaration explaining what they do.
 20. When copying code from another project make sure to credit the original creator.
