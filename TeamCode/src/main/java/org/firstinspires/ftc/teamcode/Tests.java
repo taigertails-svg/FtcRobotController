@@ -60,5 +60,7 @@ public class Tests extends OpMode {
         telemetry.addData("gamepad1.x", gamepad1.x);
         telemetry.addData("gamepad1.y", gamepad1.y);
         telemetry.addData("gamepad1.ps", gamepad1.ps);
+        telemetry.addData("gamepad.left_bumper",gamepad1.left_bumper);
+        telemetry.addData("gamepad1.right_bumper",gamepad1.right_bumper);
     }
 }

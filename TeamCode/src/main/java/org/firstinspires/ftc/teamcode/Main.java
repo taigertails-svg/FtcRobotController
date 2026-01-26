@@ -9,6 +9,7 @@ public class Main extends OpMode {
     Drive Drive = new Drive();
     Shooter Shooter = new Shooter();
     double Forward, Strafe, Rotate;
+    boolean ToggleShooterSlowness = false;
 
     // Initialize driving
     @Override
@@ -22,13 +23,18 @@ public class Main extends OpMode {
     public void loop() {
         final double ServoSpinDirection = gamepad1.left_trigger - gamepad1.right_trigger;
 
-        Forward = gamepad1.left_stick_y;
-        Strafe = -gamepad1.left_stick_x;
+        if (gamepad1.right_bumper) {
+            gamepad1.rumble(1);
+            ToggleShooterSlowness = !ToggleShooterSlowness;
+        }
+
+        Forward = -gamepad1.left_stick_y;
+        Strafe = gamepad1.left_stick_x;
         Rotate = gamepad1.right_stick_x;
 
         Drive.DriveFieldRelative(Strafe, Forward, Rotate);
 
-        Shooter.SetShooterPower(gamepad1.a ? 1 : gamepad1.b ? -1 : 0);
+        Shooter.SetShooterPower(gamepad1.a ? ToggleShooterSlowness ? 0.5 : 1 : gamepad1.b ? -1 : 0);
         Shooter.SetServoPower(ServoSpinDirection > 0 ? 1 : ServoSpinDirection < 0 ? -1 : 0);
 
         if (gamepad1.ps) {
