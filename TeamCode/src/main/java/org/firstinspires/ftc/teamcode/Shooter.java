@@ -10,6 +10,7 @@ public class Shooter {
     private CRServo ServoLeft, ServoRight;
     final private Constants Constants = new Constants();
     private double PreviousMotorRevs = 0;
+    public double MaxShooterPower = Constants.MAX_SHOOTER_POWER;
     public double ShooterSpeed = 0;
 
     public void Init(HardwareMap HwMap) {
@@ -23,14 +24,14 @@ public class Shooter {
     }
 
     public void SetShooterPower(final double Power) {
-        ShooterMotor.setPower(Power * Constants.MAX_SHOOTER_POWER);
+        ShooterMotor.setPower(Power * MaxShooterPower);
         double motorRevs = ShooterMotor.getCurrentPosition() / ShooterMotor.getMotorType().getTicksPerRev();
         ShooterSpeed = motorRevs - PreviousMotorRevs;
         PreviousMotorRevs = motorRevs;
     }
 
     public void SetServoPower(final double Power) {
-        if (ShooterSpeed > Constants.MIN_SPEED_TO_ENABLE_SERVOS) {
+        if (Math.abs(ShooterSpeed) > Constants.MAX_SHOOTER_POWER / MaxShooterPower * Constants.MIN_SPEED_TO_ENABLE_SERVOS) {
             ServoLeft.setPower(-Power);
             ServoRight.setPower(Power);
         } else {

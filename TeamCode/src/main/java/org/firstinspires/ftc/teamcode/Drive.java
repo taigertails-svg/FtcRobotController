@@ -11,12 +11,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-// HUGE NEWS!!!
-// i found out why it never seemed to drive right
-// the problem was that the imu yaw never actually changes and always stays the same no matter what
-// so hopefully we will be able to fix it
-// although i am pretty sure this has nothing to do with the code ;-;
-
 public class Drive {
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight;
     public IMU Imu; // Gyros used to get the robots rotation
@@ -27,7 +21,7 @@ public class Drive {
         Imu = HwMap.get(IMU.class, Constants.IMU_NAME);
 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
         Imu.initialize(parameters);
 
