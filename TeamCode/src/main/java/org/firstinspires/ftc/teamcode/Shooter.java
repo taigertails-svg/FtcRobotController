@@ -6,12 +6,16 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Shooter {
     // Make variables
+    final private Constants Constants = new Constants();
+
     private DcMotor ShooterMotor;
     private CRServo ServoLeft, ServoRight;
-    final private Constants Constants = new Constants();
+
     private double PreviousMotorRevs = 0;
-    public double MaxShooterPower = Constants.MAX_SHOOTER_POWER;
     public double ShooterSpeed = 0;
+    public double MaxShooterPower = Constants.MAX_SHOOTER_POWER;
+
+    public boolean ServoOverride = false;
 
     public void Init(HardwareMap HwMap) {
         // Set variables
@@ -24,14 +28,15 @@ public class Shooter {
     }
 
     public void SetShooterPower(final double Power) {
+        final double motorRevs = ShooterMotor.getCurrentPosition() / ShooterMotor.getMotorType().getTicksPerRev();
+
         ShooterMotor.setPower(Power * MaxShooterPower);
-        double motorRevs = ShooterMotor.getCurrentPosition() / ShooterMotor.getMotorType().getTicksPerRev();
         ShooterSpeed = motorRevs - PreviousMotorRevs;
         PreviousMotorRevs = motorRevs;
     }
 
     public void SetServoPower(final double Power) {
-        if (Math.abs(ShooterSpeed) > Constants.MAX_SHOOTER_POWER / MaxShooterPower * Constants.MIN_SPEED_TO_ENABLE_SERVOS) {
+        if (Math.abs(ShooterSpeed) > Constants.MIN_SPEED_TO_ENABLE_SERVOS - (Constants.MAX_SHOOTER_POWER - MaxShooterPower / 1000)) {
             ServoLeft.setPower(-Power);
             ServoRight.setPower(Power);
         } else {
